@@ -103,15 +103,13 @@ app.post("/users", async (req, res) => {
         });
     }
    
-
   try {
     const result = await pool.query(
-      "insert into users (name, email) values ($1,$2)",
+      "insert into users (name, email) values ($1,$2) returning *",
       [name, email]
     );
 
     res.json(result.rows[0]);
-    // res.json({ message: "User berhasil ditambahkan" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error insert" });
