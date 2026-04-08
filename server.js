@@ -90,6 +90,7 @@ app.get("/users", async (req, res) => {
 //     });
 // });
 
+// Tambah user
 app.post("/users", async (req, res) => {
     const { name, email } = req.body || {};
 
@@ -116,6 +117,7 @@ app.post("/users", async (req, res) => {
   }
 });
 
+// Delete user
 app.delete("/users/:id", async (req, res) => {
   const id = parseInt(req.params.id);
 
@@ -140,6 +142,32 @@ app.delete("/users/:id", async (req, res) => {
     console.error(err);
     res.status(500).json({
       message: "Error delete user",
+    });
+  }
+});
+
+//Update user
+app.put("/users/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, email } = req.body;
+
+  try {
+    const result = await pool.query(
+      "UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *",
+      [name, email, id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        message: "User tidak ditemukan",
+      });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Error update user",
     });
   }
 });
