@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 
 const userRoutes = require("./routes/userRoutes");
+const employeeRoutes = require("./routes/employeeRoutes");
 
 const app = express();
 
@@ -14,5 +15,7 @@ app.get("/", (req, res) => {
 
 // 🔥 route utama
 app.use("/users", userRoutes);
+
+app.use("/employees", employeeRoutes);
 
 module.exports = app;
