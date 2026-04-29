@@ -12,22 +12,20 @@ exports.getUsers = async (req, res) => {
 
 // Tambah user
 exports.addUsers = async (req, res) => {
-    const { name, email } = req.body || {};
+    const { employeeid, username, email, password } = req.body || {};
 
-    if (!name || !email) {
+    if (!username || !email || !password) {
         return res.status(400).json({ message: "Wajib diisi" });
     }
     
     if (!email.includes("@")) {
-        return res.status(400).json({
-            message: "Email Salah"
-        });
+        return res.status(400).json({ message: "Email Salah" });
     }
    
   try {
     const result = await pool.query(
-      "insert into users (name, email) values ($1,$2) returning *",
-      [name, email]
+      "insert into users (username, email, password, employee_id) values ($1,$2,$3,$4) returning *",
+      [name, email, password, employeeid]
     );
 
     res.json(result.rows[0]);
@@ -69,12 +67,12 @@ exports.deleteUsers =  async (req, res) => {
 //Update user
 exports.updateUsers = async (req, res) => {
   const { id } = req.params;
-  const { name, email } = req.body;
+  const { username, email } = req.body;
 
   try {
     const result = await pool.query(
-      "UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *",
-      [name, email, id]
+      "UPDATE users SET username = $1, email = $2 WHERE id = $3 RETURNING *",
+      [username, email, id]
     );
 
     if (result.rowCount === 0) {

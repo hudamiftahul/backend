@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 
+const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const employeeRoutes = require("./routes/employeeRoutes");
 
@@ -17,5 +18,6 @@ app.get("/", (req, res) => {
 app.use("/users", userRoutes);
 
 app.use("/employees", employeeRoutes);
+app.use("/auth", authRoutes);
 
 module.exports = app;
